@@ -1,3 +1,4 @@
+import type { TOrderStatus } from '#/types/order'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -18,8 +19,6 @@ const MIN_ROW_HEIGHT = 56
 // Roughly how many minutes the 76px min bar width covers (used for overlap math)
 const MIN_BAR_MINUTES = 65
 
-type OrderStatus = 'queued' | 'in-progress' | 'blocked' | 'finished'
-
 type StepName = 'Machining' | 'Assembly' | 'Quality Check' | 'Packaging'
 
 type Material = {
@@ -34,7 +33,7 @@ type OrderOperation = {
   start: number
   /** minutes */
   duration: number
-  status: OrderStatus
+  status: TOrderStatus
   /** machines, stations, tools */
   resources: string[]
   /** consumed materials with quantities */
@@ -54,14 +53,14 @@ type FlatOperation = {
   index: number
 }
 
-const statusStyles: Record<OrderStatus, string> = {
+const statusStyles: Record<TOrderStatus, string> = {
   queued: 'bg-slate-300 text-slate-800',
   'in-progress': 'bg-blue-500 text-white',
   blocked: 'bg-amber-500 text-white',
   finished: 'bg-emerald-600 text-white',
 }
 
-const statusLabels: Record<OrderStatus, string> = {
+const statusLabels: Record<TOrderStatus, string> = {
   queued: 'Queued',
   'in-progress': 'In Progress',
   blocked: 'Blocked',
@@ -100,7 +99,10 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'finished',
         resources: ['Assembly Station 01'],
-        materials: [material('Material B', 8, 'pcs'), material('Fasteners', 40, 'pcs')],
+        materials: [
+          material('Material B', 8, 'pcs'),
+          material('Fasteners', 40, 'pcs'),
+        ],
       },
       {
         step: 'Quality Check',
@@ -116,7 +118,10 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'in-progress',
         resources: ['Packaging Station 01'],
-        materials: [material('Material C', 4, 'boxes'), material('Label Roll', 1, 'roll')],
+        materials: [
+          material('Material C', 4, 'boxes'),
+          material('Label Roll', 1, 'roll'),
+        ],
       },
     ],
   },
@@ -137,7 +142,10 @@ const orders: ProductionOrder[] = [
         duration: 120,
         status: 'in-progress',
         resources: ['Assembly Station 01'],
-        materials: [material('Material B', 6, 'pcs'), material('Fasteners', 32, 'pcs')],
+        materials: [
+          material('Material B', 6, 'pcs'),
+          material('Fasteners', 32, 'pcs'),
+        ],
       },
       {
         step: 'Quality Check',
@@ -153,7 +161,10 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['Packaging Station 01'],
-        materials: [material('Material C', 3, 'boxes'), material('Label Roll', 1, 'roll')],
+        materials: [
+          material('Material C', 3, 'boxes'),
+          material('Label Roll', 1, 'roll'),
+        ],
       },
     ],
   },
@@ -174,7 +185,10 @@ const orders: ProductionOrder[] = [
         duration: 75,
         status: 'blocked',
         resources: ['Assembly Station 02'],
-        materials: [material('Material B', 10, 'pcs'), material('Fasteners', 50, 'pcs')],
+        materials: [
+          material('Material B', 10, 'pcs'),
+          material('Fasteners', 50, 'pcs'),
+        ],
       },
       {
         step: 'Quality Check',
@@ -211,7 +225,10 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'queued',
         resources: ['Assembly Station 01'],
-        materials: [material('Material B', 12, 'pcs'), material('Fasteners', 60, 'pcs')],
+        materials: [
+          material('Material B', 12, 'pcs'),
+          material('Fasteners', 60, 'pcs'),
+        ],
       },
       {
         step: 'Quality Check',
@@ -227,7 +244,10 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['Packaging Station 01'],
-        materials: [material('Material C', 6, 'boxes'), material('Label Roll', 1, 'roll')],
+        materials: [
+          material('Material C', 6, 'boxes'),
+          material('Label Roll', 1, 'roll'),
+        ],
       },
     ],
   },
@@ -248,7 +268,10 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'queued',
         resources: ['Assembly Station 02'],
-        materials: [material('Material B', 9, 'pcs'), material('Fasteners', 45, 'pcs')],
+        materials: [
+          material('Material B', 9, 'pcs'),
+          material('Fasteners', 45, 'pcs'),
+        ],
       },
       {
         step: 'Quality Check',
@@ -270,7 +293,7 @@ const orders: ProductionOrder[] = [
   },
 ]
 
-const getOrderStatus = (order: ProductionOrder): OrderStatus => {
+const getOrderStatus = (order: ProductionOrder): TOrderStatus => {
   const statuses = order.operations.map((operation) => operation.status)
 
   if (statuses.includes('blocked')) return 'blocked'
@@ -338,10 +361,6 @@ const formatSchedule = (start: number, duration: number) => {
   return `${describe(start)} → ${describe(end)}`
 }
 
-/**
- * Hover card rendered in a portal with fixed positioning so it is never
- * clipped by the scrollable graph container.
- */
 const OrderHoverCard = ({ item, rect }: HoverState) => {
   const { order, operation, index } = item
   const cardRef = useRef<HTMLDivElement>(null)
@@ -439,9 +458,7 @@ const OrderHoverCard = ({ item, rect }: HoverState) => {
             <p className="text-xs text-slate-500">
               Step {index + 1} of {order.operations.length}
             </p>
-            <p className="mt-1 font-medium text-slate-800">
-              {operation.step}
-            </p>
+            <p className="mt-1 font-medium text-slate-800">{operation.step}</p>
           </div>
 
           <span
@@ -506,9 +523,7 @@ const OrderHoverCard = ({ item, rect }: HoverState) => {
               ))}
             </ul>
           ) : (
-            <p className="mt-1 text-xs text-slate-400">
-              No materials required
-            </p>
+            <p className="mt-1 text-xs text-slate-400">No materials required</p>
           )}
         </div>
       </div>
@@ -521,10 +536,7 @@ export const Timeline = () => {
   const now = Date.now()
   const startTime = now - HOURS_EACH_SIDE * HOUR_MS
 
-  const ticks = Array.from(
-    { length: TOTAL_HOURS + 1 },
-    (_, index) => index,
-  )
+  const ticks = Array.from({ length: TOTAL_HOURS + 1 }, (_, index) => index)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<HoverState | null>(null)
@@ -533,8 +545,7 @@ export const Timeline = () => {
     const element = scrollRef.current
 
     if (element) {
-      element.scrollLeft =
-        (element.scrollWidth - element.clientWidth) / 2
+      element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2
     }
   }, [])
 
@@ -543,9 +554,7 @@ export const Timeline = () => {
       {/* Header */}
       <div className="flex shrink-0 items-center justify-between border-b px-3 py-3">
         <div>
-          <h2 className="font-semibold text-slate-900">
-            Production Timeline
-          </h2>
+          <h2 className="font-semibold text-slate-900">Production Timeline</h2>
           <p className="mt-1 text-slate-500">
             Orders grouped by production step · 1 hour / division
           </p>
@@ -560,7 +569,7 @@ export const Timeline = () => {
       <div
         ref={scrollRef}
         onScroll={() => setHovered(null)}
-        className="relative min-h-0 flex-1 overflow-auto overscroll-none no-scrollbar"
+        className="relative min-h-0 flex-1 overflow-auto overscroll-contain no-scrollbar"
       >
         <div className="relative min-w-250">
           {/* Time ruler */}
@@ -646,9 +655,7 @@ export const Timeline = () => {
               >
                 {/* Step label */}
                 <div className="sticky left-0 z-20 flex flex-col justify-center border-r bg-white px-3">
-                  <span className="font-semibold text-slate-800">
-                    {step}
-                  </span>
+                  <span className="font-semibold text-slate-800">{step}</span>
 
                   <span className="mt-0.5 whitespace-nowrap text-[10px] text-slate-500">
                     {activeCount} active · {plannedCount} planned
@@ -674,12 +681,10 @@ export const Timeline = () => {
                     const { order, operation, index } = item
 
                     const left =
-                      ((operation.start + MINUTES_EACH_SIDE) /
-                        TOTAL_MINUTES) *
+                      ((operation.start + MINUTES_EACH_SIDE) / TOTAL_MINUTES) *
                       100
 
-                    const width =
-                      (operation.duration / TOTAL_MINUTES) * 100
+                    const width = (operation.duration / TOTAL_MINUTES) * 100
 
                     const lane = lanes.get(item.key) ?? 0
                     const isDimmed =
@@ -737,7 +742,7 @@ export const Timeline = () => {
 
       {/* Footer / status legend */}
       <div className="flex shrink-0 flex-wrap items-center gap-4 border-t bg-white px-3 py-2">
-        {(Object.keys(statusLabels) as OrderStatus[]).map((status) => (
+        {(Object.keys(statusLabels) as TOrderStatus[]).map((status) => (
           <span
             key={status}
             className="flex items-center gap-1.5 text-slate-500"
@@ -754,8 +759,6 @@ export const Timeline = () => {
           Current time
         </span>
       </div>
-
-      {/* Hover card (portal, never clipped by the graph) */}
       {hovered && <OrderHoverCard {...hovered} />}
     </div>
   )

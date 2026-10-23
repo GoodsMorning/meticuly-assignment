@@ -2,56 +2,28 @@ import { Timeline } from '#/components/Timeline'
 import { Button } from '#/components/ui/button'
 import { createFileRoute } from '@tanstack/react-router'
 import {
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  Clock3,
-  Cog,
   Plus,
 } from 'lucide-react'
 import { Table } from '#/components/Table'
+import { StatusCard } from '#/components/StatusCard'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
 const statuses = [
-  {
-    label: 'Queued',
-    value: 12,
-    color: 'text-slate-600',
-    bg: 'bg-slate-100',
-    icon: Clock3,
-  },
-  {
-    label: 'In Progress',
-    value: 8,
-    color: 'text-blue-600',
-    bg: 'bg-blue-50',
-    icon: Activity,
-  },
-  {
-    label: 'Blocked',
-    value: 2,
-    color: 'text-amber-600',
-    bg: 'bg-amber-50',
-    icon: AlertTriangle,
-  },
-  {
-    label: 'Finished',
-    value: 24,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-    icon: CheckCircle2,
-  },
-]
+  { status: 'queued', value: 12 },
+  { status: 'in-progress', value: 8 },
+  { status: 'blocked', value: 2 },
+  { status: 'finished', value: 24 },
+] as const
 
 function Home() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 p-4 md:p-8">
-        {/* Header */}
-        <header className="flex flex-wrap items-center justify-between gap-4">
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-sm text-slate-500">Production Management</p>
             <h1 className="text-2xl font-semibold tracking-tight">
@@ -66,40 +38,22 @@ function Home() {
               <Plus className="size-4" />
               Add Order
             </Button>
-            <Button variant="secondary">
-              <Cog className="size-4" />
-              Step Config
-            </Button>
           </div>
-        </header>
+        </div>
 
-        {/* Status Overview */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {statuses.map(({ label, value, color, bg, icon: Icon }) => (
-            <div
-              key={label}
-              className={`rounded-lg px-4 py-1 flex flex-row items-center justify-between ${bg}`}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <div className={`rounded-lg p-2`}>
-                  <Icon className={`size-6 ${color}`} />
-                  <p className="text-sm text-slate-500">{label}</p>
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <p className="text-3xl font-semibold tabular-nums">{value}</p>
-                <p className="text-xs text-slate-400">Orders</p>
-              </div>
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {statuses.map(({ status, value }) => (
+            <StatusCard key={status} status={status} value={value} />
           ))}
-        </section>
+        </div>
 
         <Timeline />
+
         <Table />
-        <footer className="text-center text-xs text-slate-400">
-          Meticuly Production Dashboard · Demo data
-        </footer>
       </div>
+      <footer className="py-4 text-center text-xs text-slate-400">
+        Meticuly Production Dashboard · Demo data
+      </footer>
     </main>
   )
 }

@@ -1,4 +1,4 @@
-export type OrderStatus = 'queued' | 'in-progress' | 'blocked' | 'finished'
+import type { TOrderStatus } from "#/types/order"
 
 export type StepName = 'Machining' | 'Assembly' | 'Quality Check' | 'Packaging'
 
@@ -14,7 +14,7 @@ export type OrderOperation = {
   start: number
   /** minutes */
   duration: number
-  status: OrderStatus
+  status: TOrderStatus
   /** machines, stations, tools */
   resources: string[]
   /** consumed materials with quantities */
@@ -27,14 +27,14 @@ export type ProductionOrder = {
   operations: OrderOperation[]
 }
 
-export const statusStyles: Record<OrderStatus, string> = {
+export const statusStyles: Record<TOrderStatus, string> = {
   queued: 'bg-slate-300 text-slate-800',
   'in-progress': 'bg-blue-500 text-white',
   blocked: 'bg-amber-500 text-white',
   finished: 'bg-emerald-600 text-white',
 }
 
-export const statusLabels: Record<OrderStatus, string> = {
+export const statusLabels: Record<TOrderStatus, string> = {
   queued: 'Queued',
   'in-progress': 'In Progress',
   blocked: 'Blocked',
@@ -244,7 +244,7 @@ export const orders: ProductionOrder[] = [
 ]
 
 /** Overall order status derived from its steps. */
-export const getOrderStatus = (order: ProductionOrder): OrderStatus => {
+export const getOrderStatus = (order: ProductionOrder): TOrderStatus => {
   const statuses = order.operations.map((operation) => operation.status)
 
   if (statuses.includes('blocked')) return 'blocked'
