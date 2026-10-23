@@ -75,7 +75,7 @@ const steps: StepName[] = [
   'Packaging',
 ]
 
-const m = (name: string, quantity: number, unit: string): Material => ({
+const material = (name: string, quantity: number, unit: string): Material => ({
   name,
   quantity,
   unit,
@@ -92,7 +92,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'finished',
         resources: ['Machine 01'],
-        materials: [m('Material A', 12, 'kg')],
+        materials: [material('Material A', 12, 'kg')],
       },
       {
         step: 'Assembly',
@@ -100,7 +100,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'finished',
         resources: ['Assembly Station 01'],
-        materials: [m('Material B', 8, 'pcs'), m('Fasteners', 40, 'pcs')],
+        materials: [material('Material B', 8, 'pcs'), material('Fasteners', 40, 'pcs')],
       },
       {
         step: 'Quality Check',
@@ -108,7 +108,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'finished',
         resources: ['QC Station 01', 'Inspection Kit'],
-        materials: [m('Calibration Fluid', 0.5, 'L')],
+        materials: [material('Calibration Fluid', 0.5, 'L')],
       },
       {
         step: 'Packaging',
@@ -116,7 +116,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'in-progress',
         resources: ['Packaging Station 01'],
-        materials: [m('Material C', 4, 'boxes'), m('Label Roll', 1, 'roll')],
+        materials: [material('Material C', 4, 'boxes'), material('Label Roll', 1, 'roll')],
       },
     ],
   },
@@ -129,7 +129,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'finished',
         resources: ['Machine 01'],
-        materials: [m('Material A', 10, 'kg')],
+        materials: [material('Material A', 10, 'kg')],
       },
       {
         step: 'Assembly',
@@ -137,7 +137,7 @@ const orders: ProductionOrder[] = [
         duration: 120,
         status: 'in-progress',
         resources: ['Assembly Station 01'],
-        materials: [m('Material B', 6, 'pcs'), m('Fasteners', 32, 'pcs')],
+        materials: [material('Material B', 6, 'pcs'), material('Fasteners', 32, 'pcs')],
       },
       {
         step: 'Quality Check',
@@ -145,7 +145,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['QC Station 01', 'Inspection Kit'],
-        materials: [m('Calibration Fluid', 0.5, 'L')],
+        materials: [material('Calibration Fluid', 0.5, 'L')],
       },
       {
         step: 'Packaging',
@@ -153,7 +153,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['Packaging Station 01'],
-        materials: [m('Material C', 3, 'boxes'), m('Label Roll', 1, 'roll')],
+        materials: [material('Material C', 3, 'boxes'), material('Label Roll', 1, 'roll')],
       },
     ],
   },
@@ -166,7 +166,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'finished',
         resources: ['Machine 02'],
-        materials: [m('Material A', 15, 'kg')],
+        materials: [material('Material A', 15, 'kg')],
       },
       {
         step: 'Assembly',
@@ -174,7 +174,7 @@ const orders: ProductionOrder[] = [
         duration: 75,
         status: 'blocked',
         resources: ['Assembly Station 02'],
-        materials: [m('Material B', 10, 'pcs'), m('Fasteners', 50, 'pcs')],
+        materials: [material('Material B', 10, 'pcs'), material('Fasteners', 50, 'pcs')],
       },
       {
         step: 'Quality Check',
@@ -182,7 +182,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['QC Station 01', 'Inspection Kit'],
-        materials: [m('Calibration Fluid', 0.5, 'L')],
+        materials: [material('Calibration Fluid', 0.5, 'L')],
       },
       {
         step: 'Packaging',
@@ -190,7 +190,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['Packaging Station 02'],
-        materials: [m('Material C', 5, 'boxes')],
+        materials: [material('Material C', 5, 'boxes')],
       },
     ],
   },
@@ -203,7 +203,7 @@ const orders: ProductionOrder[] = [
         duration: 150,
         status: 'queued',
         resources: ['Machine 01'],
-        materials: [m('Material B', 20, 'kg')],
+        materials: [material('Material B', 20, 'kg')],
       },
       {
         step: 'Assembly',
@@ -211,7 +211,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'queued',
         resources: ['Assembly Station 01'],
-        materials: [m('Material B', 12, 'pcs'), m('Fasteners', 60, 'pcs')],
+        materials: [material('Material B', 12, 'pcs'), material('Fasteners', 60, 'pcs')],
       },
       {
         step: 'Quality Check',
@@ -219,7 +219,7 @@ const orders: ProductionOrder[] = [
         duration: 45,
         status: 'queued',
         resources: ['QC Station 01', 'Inspection Kit'],
-        materials: [m('Calibration Fluid', 0.5, 'L')],
+        materials: [material('Calibration Fluid', 0.5, 'L')],
       },
       {
         step: 'Packaging',
@@ -227,7 +227,7 @@ const orders: ProductionOrder[] = [
         duration: 60,
         status: 'queued',
         resources: ['Packaging Station 01'],
-        materials: [m('Material C', 6, 'boxes'), m('Label Roll', 1, 'roll')],
+        materials: [material('Material C', 6, 'boxes'), material('Label Roll', 1, 'roll')],
       },
     ],
   },
@@ -240,7 +240,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'queued',
         resources: ['Machine 02'],
-        materials: [m('Material A', 14, 'kg')],
+        materials: [material('Material A', 14, 'kg')],
       },
       {
         step: 'Assembly',
@@ -248,7 +248,7 @@ const orders: ProductionOrder[] = [
         duration: 90,
         status: 'queued',
         resources: ['Assembly Station 02'],
-        materials: [m('Material B', 9, 'pcs'), m('Fasteners', 45, 'pcs')],
+        materials: [material('Material B', 9, 'pcs'), material('Fasteners', 45, 'pcs')],
       },
       {
         step: 'Quality Check',
@@ -256,7 +256,7 @@ const orders: ProductionOrder[] = [
         duration: 45,
         status: 'queued',
         resources: ['QC Station 01', 'Inspection Kit'],
-        materials: [m('Calibration Fluid', 0.5, 'L')],
+        materials: [material('Calibration Fluid', 0.5, 'L')],
       },
       {
         step: 'Packaging',
@@ -264,7 +264,7 @@ const orders: ProductionOrder[] = [
         duration: 45,
         status: 'queued',
         resources: ['Packaging Station 02'],
-        materials: [m('Material C', 4, 'boxes')],
+        materials: [material('Material C', 4, 'boxes')],
       },
     ],
   },
@@ -381,7 +381,7 @@ const OrderHoverCard = ({ item, rect }: HoverState) => {
   return createPortal(
     <div
       ref={cardRef}
-      className="pointer-events-none fixed z-[100] w-72 rounded-lg border border-slate-200 bg-white p-3 text-xs text-slate-700 shadow-xl"
+      className="pointer-events-none fixed z-100 w-72 rounded-lg border border-slate-200 bg-white p-3 text-xs text-slate-700 shadow-xl"
       style={{
         top: position?.top ?? 0,
         left: position?.left ?? 0,
@@ -493,14 +493,14 @@ const OrderHoverCard = ({ item, rect }: HoverState) => {
 
           {operation.materials.length > 0 ? (
             <ul className="mt-1 space-y-1">
-              {operation.materials.map((material) => (
+              {operation.materials.map((mat) => (
                 <li
-                  key={material.name}
+                  key={mat.name}
                   className="flex items-center justify-between rounded bg-slate-50 px-2 py-1"
                 >
-                  <span className="text-slate-700">{material.name}</span>
+                  <span className="text-slate-700">{mat.name}</span>
                   <span className="font-medium text-slate-900">
-                    {formatQuantity(material.quantity)} {material.unit}
+                    {formatQuantity(mat.quantity)} {mat.unit}
                   </span>
                 </li>
               ))}
